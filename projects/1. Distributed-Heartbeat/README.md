@@ -68,6 +68,7 @@ $ go run ./cmd/node --port=8001 --peers=http://localhost:8002,http://localhost:8
 $ go run ./cmd/node --port=8002 --peers=http://localhost:8001,http://localhost:8003
 
 # Terminal 3
+
 $ go run ./cmd/node --port=8003 --peers=http://localhost:8001,http://localhost:8002
 ```
 
