@@ -54,6 +54,7 @@ func (n *Node) Start() {
 	http.HandleFunc("/store", n.StoreKeyValue)
 	http.HandleFunc("/replicate", n.ReplicateKeyValue)
 	http.HandleFunc("/store/hash", n.StoreHash)
+	http.HandleFunc("/store/key", n.GetValue)
 	http.HandleFunc("/replicateAll", n.AcceptReplicateAll)
 
 	go n.PingPeers()
@@ -347,4 +348,40 @@ func (n *Node) AcceptReplicateAll(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"message": "All key-value pairs replicated successfully"}`))
+}
+
+func (n *Node) GetValue(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Parse the key from the request body
+	var keyValue struct {
+		Key string `json:"key"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&keyValue); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Search for the key in the local store
+	for _, storeItem := range n.DB.Store {
+		if storeItem.Key == keyValue.Key {
+			// If found, respond with the value
+			response := struct {
+				Value any `json:"value"`
+			}{
+				Value: storeItem.Value,
+			}
+
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(response)
+			return
+		}
+	}
+	// If not found, respond with an error
+	http.Error(w, "Key not found", http.StatusNotFound)
 }

@@ -28,6 +28,10 @@ func Load() *Config {
 		log.Fatal("Port must be provided")
 	}
 
+	if *peers == "" {
+		log.Fatal("Peers address must be provided")
+	}
+
 	ping, err := strconv.Atoi(*pingFreq)
 	if err != nil {
 		log.Fatalf("Invalid ping frequency: %v", err)
