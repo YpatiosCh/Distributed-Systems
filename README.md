@@ -189,7 +189,6 @@ A complete distributed log service with:
 **Each chapter includes:**
 - Detailed README with explanations
 - Working code examples
-- Comprehensive tests
 - Best practices and pitfalls
 - Performance considerations
 - Links to additional resources
@@ -329,20 +328,6 @@ go mod download
 - Focus on **Project 3, Chapters 9-10**
 - Study the Raft implementation deeply
 - Experiment with production deployment
-
----
-
-## 🧪 Testing Philosophy
-
-All projects include:
-- **Unit tests** - Individual component testing
-- **Integration tests** - Multi-component scenarios
-- **End-to-end tests** - Full system validation
-
-Run tests in any project:
-```bash
-go test -v ./...
-```
 
 ---
 
